@@ -14,7 +14,14 @@ local MAGENTA="\[\033[1;35m\]"
 local CYAN="\[\033[1;36m\]"
 local NORMAL="\[\033[0m\]"
 
-echo $GREY
 
-export PS1="${BLUE}\u${CYAN}@${YELLOW}\h ${GREEN}\w\n${YELLOW}\$>${NORMAL}"
+function git_line
+{
+  local BRANCH="\$(git branch | grep ^* | sed s/\*\ //)"
+  local ORIGIN="\$(git remote -v | grep '(fetch)' | sed 's/.*git@//' | sed 's/\.git.*//')"
+  local LINE="${YELLOW}---git:($CYAN${ORIGIN}$YELLOW - $MAGENTA$BRANCH$YELLOW)---\n$NORMAL"
+  echo "\$(git branch &> /dev/null; if [ \$? -eq 0 ]; then echo "\"$LINE\""; fi)"
+}
+
+export PS1="$GREY(\$(date +'%b %d %Y'), \@) - ${BLUE}\u${CYAN}@${YELLOW}\h ${GREEN}\w\n$(git_line)${YELLOW}\$>${NORMAL} "
 }
