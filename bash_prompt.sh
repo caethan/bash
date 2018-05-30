@@ -9,13 +9,14 @@ MAGENTA="\[\033[1;35m\]"
 CYAN="\[\033[1;36m\]"
 NORMAL="\[\033[0m\]"
 
+# Turns off the devault virtual environment display
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 function prompt() {
 
     function git_info() {
         local BRANCH="\$(git branch | grep ^* | sed s/\*\ //)"
-        local ORIGIN="\$(git remote -v | grep '(fetch)' | sed 's/.*git@//' | sed 's/\.git.*//')"
+        local ORIGIN="\$(git remote -v | grep '(fetch)' | sed 's/.*git@//' | sed 's/.*https:\/\///' | sed 's/\.git.*//')"
         local LINE="${YELLOW}---git:($CYAN${ORIGIN}$YELLOW - $MAGENTA$BRANCH$YELLOW)---\n$NORMAL"
         echo "\$(git branch &> /dev/null; if [ \$? -eq 0 ]; then echo "\"$LINE\""; fi)"
     }
